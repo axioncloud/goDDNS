@@ -1,0 +1,46 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "go",
+			"label": "go: build - backend",
+			"command": "build",
+			"args": [
+				"-o",
+				"${workspaceFolder}/bin",
+				"-ldflags",
+				"-H=windowsgui"
+			],
+			"problemMatcher": [
+				"$go"
+			],
+			"group": "build",
+			"detail": "go build -o ${workspaceFolder}/bin -ldflags=\"-H windowsgui\"",
+			"options": {
+				"cwd": "${workspaceFolder}/backend"
+			}
+		},
+		{
+			"type": "npm",
+			"script": "build",
+			"path": "frontend",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build - frontend",
+			"detail": "electron-builder",
+			"dependsOn": [
+				"npm: clean - frontend"
+			]
+		},
+		{
+			"type": "shell",
+			"command": "rmdir -Recurse -Force ../bin; exit",
+			"options": {
+				"cwd": "${workspaceFolder}/frontend"
+			},
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: clean - frontend"
+		}
+	]
+}
