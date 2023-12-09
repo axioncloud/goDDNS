@@ -1,7 +1,7 @@
 package types
 
 // provider represents data about a DDNS Provider.
-type configItem struct {
+type ConfigItem struct {
 	NAME  string
 	VALUE string
 }
