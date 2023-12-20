@@ -1,3 +1,4 @@
 bin/
 frontend/nwjs*
 frontend/node_modules
+*.exe

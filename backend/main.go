@@ -18,6 +18,7 @@ import (
 	"time"
 
 	"github.com/Microsoft/go-winio"
+	"github.com/axioncloud/goDDNS/backend/types"
 	"github.com/denisbrodbeck/machineid"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -38,7 +39,7 @@ func init() {
 	}
 }
 
-var DDNS_PROVIDERS map[string]types.provider = make(map[string]types.provider)
+var DDNS_PROVIDERS map[string]types.Provider = make(map[string]types.Provider)
 
 func updateDDNSProviders() {
 	for k := range DDNS_PROVIDERS {
@@ -54,7 +55,7 @@ func updateDDNSProviders() {
 		log.Fatalln("There was an issue retrieving providers from the DB")
 	} else {
 		for result.Next() {
-			var selectedProvider provider = *new(provider)
+			var selectedProvider types.Provider = *new(types.Provider)
 			err := result.Scan(&selectedProvider.UUID, &selectedProvider.NAME, &selectedProvider.URL, &selectedProvider.SELECTED)
 			if err != nil {
 				log.Fatalln("Error getting providers")
@@ -76,7 +77,7 @@ func getSelectedProvider(c *gin.Context) {
 		log.Fatalln("There was an issue retrieving the selected provider in the DB")
 	} else {
 		for result.Next() {
-			var selectedProvider provider = *new(provider)
+			var selectedProvider types.Provider = *new(types.Provider)
 			err := result.Scan(&selectedProvider.UUID, &selectedProvider.NAME, &selectedProvider.URL, &selectedProvider.SELECTED)
 			if err != nil {
 				log.Fatalln("Error getting selected provider")
@@ -96,7 +97,7 @@ func getRunRESTServer() bool {
 		log.Fatalln("There was an issue retrieving the selected provider in the DB")
 	} else {
 		for result.Next() {
-			var config configItem = *new(configItem)
+			var config types.ConfigItem = *new(types.ConfigItem)
 			err := result.Scan(&config.NAME, &config.VALUE)
 			if err != nil {
 				log.Fatalln("Error getting selected provider")

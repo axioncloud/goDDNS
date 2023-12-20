@@ -3,7 +3,7 @@ module github.com/axioncloud/goDDNS/backend
 go 1.19
 
 require (
-	github.com/axioncloud/goDDNS/backend v0.0.1
+	github.com/axioncloud/goDDNS/backend v0.0.2
 	github.com/Microsoft/go-winio v0.6.1
 	github.com/denisbrodbeck/machineid v1.0.1
 	github.com/gin-contrib/cors v1.4.0
