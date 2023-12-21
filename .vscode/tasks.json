@@ -34,7 +34,12 @@
 		},
 		{
 			"type": "shell",
-			"command": "rmdir -Recurse -Force ../bin; exit",
+			"windows": {
+				"command": "rmdir -Recurse -Force ../bin; exit",
+			},
+			"linux":{
+				"command": "rm -rf ../bin; exit",
+			},
 			"options": {
 				"cwd": "${workspaceFolder}/frontend"
 			},

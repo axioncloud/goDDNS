@@ -19,7 +19,9 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/backend",
-            "buildFlags": "-ldflags -H=windowsgui"
+            "windows": {
+                "buildFlags": "-ldflags -H=windowsgui"
+            },
         },
         {
             "name": "Build goDDNS - backend",
@@ -27,7 +29,9 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/backend",
-            "buildFlags": "-ldflags -H=windowsgui"
+            "windows": {
+                "buildFlags": "-ldflags -H=windowsgui"
+            },
         },
     ]
 }

@@ -17,7 +17,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Microsoft/go-winio"
 	"github.com/axioncloud/goDDNS/backend/types"
 	"github.com/denisbrodbeck/machineid"
 	"github.com/gin-contrib/cors"
@@ -36,6 +35,12 @@ func init() {
 		fmt.Printf("ERROR: %s\n", ok)
 	} else {
 		OS_UUID = UUID
+	}
+	_, err := os.Create("config.db")
+	if err != nil && !errors.Is(err, fs.ErrExist) {
+
+	} else {
+		initDB()
 	}
 }
 
@@ -193,7 +198,14 @@ func openFrontend() {
 	wd, _ := os.Getwd()
 	log.Println(wd)
 
-	cmd := exec.Command("nwjs-sdk/nw.exe", ".")
+	var cmd *exec.Cmd = nil
+	if runtime.GOOS == "windows" {
+		cmd = exec.Command("nwjs-sdk/nw.exe", ".")
+
+	} else {
+		cmd = exec.Command("nwjs-sdk/nw", ".")
+
+	}
 
 	cmd.Env = os.Environ()
 	cmd.Dir = wd
@@ -221,6 +233,22 @@ func closeDB(db *sql.DB) {
 	} else {
 		log.Println("DB closed")
 	}
+}
+
+func initDB() {
+	db := openDB()
+	defer closeDB(db)
+
+	command, err := os.ReadFile("init.sql")
+	commandStr := string(command)
+	if err != nil {
+		log.Fatalf("Could not read DB init script: %s", commandStr)
+	}
+	_, err = db.Query(commandStr)
+	if err != nil {
+		log.Fatalf("Could not initialize DB: %s", commandStr)
+	}
+	log.Println("DB initialized")
 }
 
 func main() {
@@ -274,7 +302,7 @@ func main() {
 	//Listen on Pipe for windows OS
 	//Listen on unix socket for *nix/MacOS
 	if runtime.GOOS == "windows" {
-		listener, err := winio.ListenPipe(CONNECTION_PIPE, nil)
+		/*listener, err := winio.ListenPipe(CONNECTION_PIPE, nil)
 
 		if err != nil {
 			log.Fatalln(err)
@@ -284,7 +312,7 @@ func main() {
 				log.Fatalf("listen: %s\n", err)
 				listener.Close()
 			}
-		}()
+		}()*/
 	} else {
 		listener, err := net.Listen("unix", CONNECTION_FILE)
 
